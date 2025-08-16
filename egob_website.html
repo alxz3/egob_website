@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evil Space Goblins</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Import the Roboto font for a modern minimalistic look */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #0d1117; /* Dark background similar to a space theme */
+            color: #c9d1d9; /* Light text color for contrast */
+            overflow-x: hidden; /* Prevents horizontal scrollbar */
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #243b55, transparent);
+        }
+
+        #starfield-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place it behind all other content */
+            opacity: 0.5; /* Make the effect subtle */
+        }
+        
+        .image-container {
+            position: relative;
+            max-width: 100%;
+            aspect-ratio: 16 / 9;
+            background-color: #1a202c;
+            border-radius: 1rem;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #4a5568;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 1rem;
+        }
+
+        .generated-image {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 1rem;
+            object-fit: contain;
+        }
+
+        /* Corrected style for the hero background image */
+        #home {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://i.imgur.com/iK8vwAW.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-300 antialiased">
+    
+    <!-- Canvas for the background starfield effect -->
+    <canvas id="starfield-canvas"></canvas>
+
+    <!-- Header Section: Fixed at the top with navigation links -->
+    <header class="bg-black/50 backdrop-blur-sm sticky top-0 z-50 py-4 shadow-xl">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <!-- Faction Logo -->
+            <a href="#" class="h-12 flex items-center">
+                <img src="https://i.imgur.com/t0x6q77.png" alt="Evil Space Goblins logo" class="h-full w-auto rounded-full">
+            </a>
+            <!-- Navigation Links -->
+            <nav>
+                <ul class="flex space-x-4 md:space-x-8">
+                    <li><a href="#home" class="text-sm md:text-base hover:text-green-400 transition-colors">E-GOB</a></li>
+                    <li><a href="#recruitment" class="text-sm md:text-base hover:text-green-400 transition-colors">Recruitment</a></li>
+                    <li><a href="https://www.e-gob.de" class="text-sm md:text-base hover:text-green-400 transition-colors" target="_blank">JF Service</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Wrapper -->
+    <main class="container mx-auto px-4 py-8 md:py-16">
+
+        <!-- Hero Section: The main title and motto -->
+        <section id="home" class="text-center py-20 bg-gray-800/20 rounded-xl shadow-lg mb-16">
+            <h2 class="text-4xl md:text-6xl font-extrabold text-green-400 tracking-tight leading-tight">
+                Evil Space Goblins
+            </h2>
+            <p class="mt-4 md:mt-6 text-xl md:text-2xl font-light max-w-2xl mx-auto">
+                "Can't be nice to everybody."
+            </p>
+        </section>
+
+        <!-- Lore Section: Divided into multiple cards for readability -->
+        <section id="lore" class="mb-16">
+            <h3 class="text-3xl md:text-5xl font-bold text-green-400 mb-8 text-center uppercase">Our History</h3>
+            
+            <!-- First row of lore cards -->
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12 mb-8">
+                
+                <!-- The Corporate Schism -->
+                <div class="bg-gray-800/50 p-6 md:p-8 rounded-lg shadow-md">
+                    <h4 class="text-xl md:text-2xl font-semibold mb-3">The Corporate Schism</h4>
+                    <p class="text-base leading-relaxed">
+                        Before their reputation as ruthless space marauders, the Evil Space Goblins were not a race, but a corporate entity known as "Goblinworks Tech & Salvage." Operating as a minor, yet highly innovative, subsidiary within a major galactic coalition, they specialized in "unconventional" engineering and salvage operations in high-risk zones. Their knack for turning battlefield scrap into high-performance weaponry and their audacious, no-rules approach to resource acquisition made them a nuisance to the more bureaucratic, risk-averse alliances.
+                    </p>
+                    <p class="text-base leading-relaxed mt-4">
+                        The schism began when a joint-venture contract with an alliance went sour. Seeking to acquire Goblinworks' proprietary warp-drive technology and changing their way to life fundamentaly. When the Goblins refused to follow up on the demands, the contract was declared void. With no secure way to access their assets and having their leadership branded as renegades, they were forced to abandon once-friendly areas entirely.
+                    </p>
+                </div>
+                
+                <!-- Tactics and Technology -->
+                <div class="bg-gray-800/50 p-6 md:p-8 rounded-lg shadow-md">
+                    <h4 class="text-xl md:text-2xl font-semibold mb-3">Tactics and Technology</h4>
+                    <p class="text-base leading-relaxed">
+                        The Goblins' combat doctrine is a direct reflection of their origins. While other corporations and alliances field massive, ponderous capital ships, the Evil Space Goblins rely on guerilla tactics. They utilize fleets of small, highly-agile ships, a modern take on the classic goblin horde. These ships are custom-built, making them unpredictable and difficult for standard tactics to track and shoot. Their weaponry often consists of improvised energy-based systems and explosive projectiles designed to bypass the hardened shields of larger ships and strike at their vital subsystems. A single Goblin ship may not be a threat, but a coordinated swarm can overwhelm even the most powerful dreadnought.
+                    </p>
+                </div>
+
+                <!-- The Goblin "Re-Clone" -->
+                <div class="bg-gray-800/50 p-6 md:p-8 rounded-lg shadow-md">
+                    <h4 class="text-xl md::text-2xl font-semibold mb-3">The Goblin "Re-Clone"</h4>
+                    <p class="text-base leading-relaxed">
+                        The Goblins' unyielding resolve is not just a matter of spirit. They have perfected their own brutal form of personal resurrection, a process they call "Re-Cloning." Unlike the sterile, pristine clones of the galaxy, the Goblins' version is a quick and dirty process that is more akin to a forced rebirth. A veteran who falls in combat is quickly returned to a combat-ready state, but their body often bears new scars, and their memories of the final moments of their demise are seared into their minds. To the Goblins, these scars are not a flaw but a testament to their resilience—a record of every dirty uniform and every hard-fought victory.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Second row of lore cards -->
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+                <!-- The Wormhole Frontier -->
+                <div class="bg-gray-800/50 p-6 md:p-8 rounded-lg shadow-md">
+                    <h4 class="text-xl md:text-2xl font-semibold mb-3">The Wormhole Frontier</h4>
+                    <p class="text-base leading-relaxed">
+                        Led by Nyx, part of the Goblins executed a desperate exodus, moving into the deepest, most unstable regions of the galaxy. They found refuge in a series of interconnected, uncharted wormhole systems—a realm of chaotic spatial anomalies and unpredictable celestial phenomena. This lawless frontier, shunned by others, became their home.
+                    </p>
+                    <p class="text-base leading-relaxed mt-4">
+                        Within this dangerous realm, they built their new home from the ground up. Survival demanded a pragmatic and cutthroat mindset, and their original corporate motto—a dry-witted jab at their rivals—transformed into a creed: "Can't be nice to everybody." This philosophy defines their culture; they are fiercely loyal to their own but show no quarter to outsiders, who they view as either a threat or a resource.
+                    </p>
+                </div>
+
+                <!-- Deployment to Syndicate -->
+                <div class="bg-gray-800/50 p-6 md:p-8 rounded-lg shadow-md">
+                    <h4 class="text-xl md:text-2xl font-semibold mb-3">Deployment to Syndicate</h4>
+                    <p class="text-base leading-relaxed">
+                        While a part of the Goblins joined the Wormhole Frontier, another part, led by Atlas, deployed into Syndicate region. A notorious lawless hub of mercenary activity and black market trade, Syndicate was a testing ground. Still in contact with the Wormhole Frontier, “Can’t be nice to everybody” philosophy also reached Syndicate. The Goblins were eager to disrupt the supply lines of their enemies. Deploying their swarm tactics, the Goblins wreaked havoc on enemy pilots and industrialists. They proved that their salvaged ships and unorthodox methods could stand up to and even defeat the most expensive, state-of-the-art combat vessels. This campaign cemented their reputation as a force to be feared and expanded their influence across the lawless sectors of New Eden.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider my-16"></div>
+
+        <!-- Characters Section: Individual cards for each character -->
+        <section id="characters" class="mb-16">
+            <h3 class="text-3xl md:text-5xl font-bold text-green-400 mb-8 text-center uppercase">Our Vanguard</h3>
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12">
+                
+                <!-- Nyx Character Profile -->
+                <div class="bg-gray-800/50 p-6 md:p-8 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-green-300 mb-3">Nyx, Co-Founder and Vanguard</h4>
+                    <!-- Static Image for Nyx -->
+                    <div class="image-container">
+                        <img src="https://i.imgur.com/gETtD2v.jpeg" alt="A static placeholder image for the character Nyx" class="generated-image" onerror="this.onerror=null;this.src='https://placehold.co/800x450/2d3748/a0aec0?text=Failed to load Nyx image';">
+                    </div>
+                    <p class="text-base leading-relaxed mb-4 mt-4">
+                        Nyx is a goblin woman and a founding member of the Evil Space Goblins. A veteran of countless skirmishes, her cheerful demeanor masks a fierce cunning and an unwavering loyalty to her comrades. She's seen the worst the universe has to offer and has learned to thrive on the chaos. To her, every dirty uniform and every hard-fought victory is a testament to her Goblins' resilience. She and her crew are the reason the Evil Space Goblins are so formidable.
+                    </p>
+                    <div class="text-sm leading-relaxed text-gray-400">
+                        <p class="font-bold">Appearance:</p>
+                        <p>Nyx's appearance is as unique as her personality. She has vibrant green skin and sharp, pointed ears, with a modern side-cut hairstyle of brunette hair that fades to green at the very end. A small, stylized skull tattoo adorns her side, just above the waistband of her uniform. Her uniform is a shiny, form-fitting, dark-green military outfit with a latex-like appearance. It features a high collar and prominent black-silverish armor elements, with a small corset and breast cutout. A sidearm is always holstered at her hip, ready for whatever the galaxy throws at them.</p>
+                    </div>
+                </div>
+
+                <!-- Atlas Character Profile -->
+                <div class="bg-gray-800/50 p-6 md:p-8 rounded-lg shadow-md">
+                    <h4 class="text-2xl font-semibold text-green-300 mb-3">Atlas, The Silent Protector</h4>
+                    <!-- Static Image for Atlas -->
+                    <div class="image-container">
+                        <img src="https://i.imgur.com/ZAsYGt0.jpeg" alt="A static placeholder image for the character Atlas" class="generated-image" onerror="this.onerror=null;this.src='https://placehold.co/800x450/2d3748/a0aec0?text=Failed to load Atlas image';">
+                    </div>
+                    <p class="text-base leading-relaxed mb-4 mt-4">
+                        Atlas is a seasoned male goblin warrior and a close fighting buddy to Nyx. He stands as a testament to the Goblins' unyielding resolve. His demeanor is often quiet and serious, a perfect counterbalance to Nyx's jovial nature. He is a silent protector, a force of nature in combat, and a symbol of their unshakeable brotherhood. Together, he and Nyx are the vanguard of the Evil Space Goblins, a duo as formidable in the bar as they are on the battlefield.
+                    </p>
+                    <div class="text-sm leading-relaxed text-gray-400">
+                        <p class="font-bold">Appearance and Gear:</p>
+                        <p>Atlas's skin, a slightly darker shade of green than Nyx's, is covered in scars from countless battles. His eyes are a piercing, icy blue, and his short, black hair is slicked back with an undercut. A jagged, tribal tattoo runs down his left arm, symbolizing a personal vow to a fallen comrade. He wears a similar, but more heavily armored, uniform to Nyx. It is a form-fitting, shiny, dark-green military outfit with a high collar and prominent, heavy-duty shoulder pads. Unlike Nyx, his uniform is a full one-piece with a utility belt that has a few tactical pouches and a small knife holster. He is never seen without his massive, two-handed energy hammer, which hums with a faint violet glow.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider my-16"></div>
+
+        <!-- Recruitment Section: New section with recruitment information -->
+        <section id="recruitment" class="mb-16">
+            <h3 class="text-3xl md:text-5xl font-bold text-green-400 mb-8 text-center uppercase">Recruitment</h3>
+            <div class="bg-gray-800/50 p-6 md:p-8 rounded-lg shadow-md">
+                <p class="text-base leading-relaxed">
+                    Looking for a new corporation to call home in EVE Online?
+                </p>
+                <p class="mt-4 text-base leading-relaxed">
+                    Join the Evil Space Goblins, a group of pilots who know how to get the job done and have a good time. We believe you can't be nice to everybody, and sometimes, you just need a cruise missile to show it.
+                </p>
+                <p class="mt-4 text-base leading-relaxed">
+                    We're looking for new members ready to dive into space and make their mark. We're a tight-knit crew, and we'll always have your back.
+                </p>
+                <p class="mt-4 text-base leading-relaxed">
+                    So, if you're ready to embrace the life of a space goblin and take on the universe, join the Evil Space Goblins today. We're waiting for you.
+                </p>
+            </div>
+        </section>
+
+        <div class="section-divider my-16"></div>
+
+        <!-- C-GOB or Greedy Goblin Cadets Section -->
+        <section id="c-gob" class="mb-16">
+            <h3 class="text-3xl md:text-5xl font-bold text-green-400 mb-8 text-center uppercase">Greedy Goblin Cadets</h3>
+            <div class="bg-gray-800/50 p-6 md:p-8 rounded-lg shadow-md">
+                <p class="text-base leading-relaxed">
+                    The Greedy Goblin Cadets [C-GOB] is our entry-level corporation specifically designed for new players in EVE Online. We offer a supportive environment where you can learn the ropes of the game, understand the nuances of space combat, and get a feel for our unique faction philosophy.
+                </p>
+                <p class="mt-4 text-base leading-relaxed">
+                    Our veteran pilots are always on hand to help you with tutorials, ship fittings, and understanding the complex world of EVE. We believe that every new pilot has the potential to become a formidable force, and we're here to help you get there.
+                </p>
+                <p class="mt-4 text-base leading-relaxed">
+                    If you're new to EVE and want to start your journey with a group that has your back, the Greedy Goblin Cadets is the place for you.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-black/50 py-8 text-center text-xs text-gray-500">
+        <p>Evil Space Goblins - All Rights Reserved</p>
+    </footer>
+
+    <script>
+        // Get the canvas and its context
+        const canvas = document.getElementById('starfield-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set up the mouse object to track its position
+        const mouse = {
+            x: null,
+            y: null,
+            radius: 100 // Radius around the mouse to draw lines
+        };
+
+        // Event listener to get the mouse position
+        window.addEventListener('mousemove', (event) => {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        // Event listener to handle window resizing
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Re-initialize stars to fill the new dimensions
+            init();
+        });
+
+        // Set initial canvas dimensions
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Star class to create individual stars
+        class Star {
+            constructor(x, y, radius) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                // Give each star a random direction and speed
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+            }
+
+            // Method to draw the star on the canvas
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = '#c9d1d9';
+                ctx.fill();
+            }
+
+            // Method to update the star's position
+            update() {
+                // Bounce off the edges of the canvas
+                if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+                    this.vx = -this.vx;
+                }
+                if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+                    this.vy = -this.vy;
+                }
+
+                this.x += this.vx;
+                this.y += this.vy;
+                this.draw();
+            }
+        }
+
+        // Array to hold all the stars
+        let stars = [];
+        const numberOfStars = 100;
+
+        // Function to initialize the star field
+        function init() {
+            stars = [];
+            for (let i = 0; i < numberOfStars; i++) {
+                const radius = Math.random() * 2 + 1; // Random radius between 1 and 3
+                const x = Math.random() * (canvas.width - radius * 2) + radius;
+                const y = Math.random() * (canvas.height - radius * 2) + radius;
+                stars.push(new Star(x, y, radius));
+            }
+        }
+
+        // Main animation loop
+        function animate() {
+            // Clear the entire canvas on each frame to redraw everything
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Update and draw each star
+            for (let i = 0; i < stars.length; i++) {
+                stars[i].update();
+            }
+
+            // Check for connections between stars and the mouse
+            if (mouse.x && mouse.y) {
+                for (let i = 0; i < stars.length; i++) {
+                    const dx_mouse = stars[i].x - mouse.x;
+                    const dy_mouse = stars[i].y - mouse.y;
+                    const distance_mouse = Math.sqrt(dx_mouse * dx_mouse + dy_mouse * dy_mouse);
+
+                    // If a star is close to the mouse, draw a line to it
+                    if (distance_mouse < mouse.radius) {
+                        ctx.strokeStyle = `rgba(201, 209, 217, ${1 - distance_mouse / mouse.radius})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(mouse.x, mouse.y);
+                        ctx.lineTo(stars[i].x, stars[i].y);
+                        ctx.stroke();
+                    }
+
+                    // Check for connections between stars
+                    for (let j = i + 1; j < stars.length; j++) {
+                        const dx_stars = stars[i].x - stars[j].x;
+                        const dy_stars = stars[i].y - stars[j].y;
+                        const distance_stars = Math.sqrt(dx_stars * dx_stars + dy_stars * dy_stars);
+
+                        // If two stars are close, draw a line between them
+                        if (distance_stars < 100) {
+                            ctx.strokeStyle = `rgba(201, 209, 217, ${1 - distance_stars / 100})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.beginPath();
+                            ctx.moveTo(stars[i].x, stars[i].y);
+                            ctx.lineTo(stars[j].x, stars[j].y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            // Request the next animation frame
+            requestAnimationFrame(animate);
+        }
+        
+        // Initial setup and animation start
+        window.onload = function() {
+            init();
+            animate();
+        };
+
+    </script>
+</body>
+</html>
